@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Svalbard.Fakes
 {
@@ -35,7 +28,6 @@ namespace Svalbard.Fakes
       {
         // Add global operation exception filter
         options.Filters.Add<GlobalExceptionFilter>();
-        options.ModelBinderProviders.Insert(0, new ModelBindingProvider());
       });
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

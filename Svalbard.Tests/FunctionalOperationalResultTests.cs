@@ -44,7 +44,7 @@ namespace Svalbard.Tests
       var client = _factory.CreateClient();
       var content = JsonConvert.SerializeObject(new AddValue
       {
-        Foo = ""
+        FooLongerName = ""
       });
 
       // Act

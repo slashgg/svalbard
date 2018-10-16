@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace Svalbard.Fakes.Business
@@ -6,8 +7,9 @@ namespace Svalbard.Fakes.Business
   [DataContract]
   public class AddValue
   {
-    [Required]
+    [Required(ErrorMessage = "foo is required")]
     [DataMember(Name = "foo")]
-    public string Foo { get; set; }
+    [BindProperty(Name = "foo")]
+    public string FooLongerName { get; set; }
   }
 }
