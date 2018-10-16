@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Svalbard", "Svalbard\Svalbard.csproj", "{D903935D-96E7-4D58-9C70-5FCD084DCC16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Svalbard.Tests", "Svalbard.Tests\Svalbard.Tests.csproj", "{485F5A7A-6F59-4ECD-A466-B09C14033453}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Svalbard.Fakes", "Svalbard.Fakes\Svalbard.Fakes.csproj", "{311D5CA8-AA9A-4F95-8A38-68102648C41B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{D903935D-96E7-4D58-9C70-5FCD084DCC16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D903935D-96E7-4D58-9C70-5FCD084DCC16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D903935D-96E7-4D58-9C70-5FCD084DCC16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{485F5A7A-6F59-4ECD-A466-B09C14033453}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{485F5A7A-6F59-4ECD-A466-B09C14033453}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{485F5A7A-6F59-4ECD-A466-B09C14033453}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{485F5A7A-6F59-4ECD-A466-B09C14033453}.Release|Any CPU.Build.0 = Release|Any CPU
+		{311D5CA8-AA9A-4F95-8A38-68102648C41B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{311D5CA8-AA9A-4F95-8A38-68102648C41B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{311D5CA8-AA9A-4F95-8A38-68102648C41B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{311D5CA8-AA9A-4F95-8A38-68102648C41B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
