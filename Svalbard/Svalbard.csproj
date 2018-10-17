@@ -15,7 +15,7 @@
     <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <PackageReleaseNotes>2018/10/17 - Added support for implicit conversion to status code types.</PackageReleaseNotes>
     <FileVersion>1.0.1.0</FileVersion>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

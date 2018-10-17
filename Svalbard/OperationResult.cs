@@ -52,13 +52,7 @@ namespace Svalbard
         return;
       }
 
-      if (_statusCode != 0)
-      {
-        response.StatusCode = _statusCode;
-        return;
-      }
-
-      if (!context.ModelState.IsValid)
+      if (!context.ModelState.IsValid && _statusCode == 400)
       {
         response.StatusCode = 400;
 
@@ -79,6 +73,12 @@ namespace Svalbard
 
           return;
         }
+      }
+
+      if (_statusCode > 0)
+      {
+        response.StatusCode = _statusCode;
+        return;
       }
 
       response.StatusCode = _data != null ? 200 : 204;
