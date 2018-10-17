@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
 
 namespace Svalbard.Fakes
 {
@@ -18,17 +19,7 @@ namespace Svalbard.Fakes
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddTransient<GlobalExceptionFilter>();
-      services.Configure<ApiBehaviorOptions>(options =>
-      {
-        options.SuppressModelStateInvalidFilter = true;
-      });
-
-      services.Configure<MvcOptions>(options =>
-      {
-        // Add global operation exception filter
-        options.Filters.Add<GlobalExceptionFilter>();
-      });
+      services.AddSvalbard();
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
     }

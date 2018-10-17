@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Svalbard.Fakes.Business;
+using System;
 
 namespace Svalbard.Fakes.Controllers
 {
@@ -16,33 +17,28 @@ namespace Svalbard.Fakes.Controllers
 
     // GET api/values/5
     [HttpGet("{id}")]
-    public OperationResult<string> Get(int id)
+    public OperationResult<Value> Get(int id)
     {
-      return "value";
+      return new Value { Data = "value" };
     }
 
     // POST api/values
     [HttpPost]
-    public OperationResult<bool> Post([FromBody] AddValue value)
+    public OperationResult<Value> Post([FromBody] AddValue value)
     {
-      if (ModelState.IsValid)
+      if (!ModelState.IsValid)
       {
-        return true;
+        return Value.Empty;
       }
 
-      return false;
+      return new Value { Data = value.Foo };
     }
 
     // PUT api/values/5
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] string value)
     {
-    }
-
-    // DELETE api/values/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
-    {
+      throw new NotImplementedException();
     }
   }
 }

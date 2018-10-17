@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Svalbard.Fakes;
 using Svalbard.Fakes.Business;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -38,13 +39,34 @@ namespace Svalbard.Tests
     }
 
     [Fact]
-    public async Task Post_ValuesUnsuccessful()
+    public async Task Post_Value()
     {
       // Arrange
       var client = _factory.CreateClient();
       var content = JsonConvert.SerializeObject(new AddValue
       {
-        FooLongerName = ""
+        Foo = "data"
+      });
+
+      // Act
+      var response = await client.PostAsync("/api/values", new StringContent(content, Encoding.UTF8, "application/json"));
+
+      // Assert
+      Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+      var data = await ReadResponse<Value>(response);
+
+      Assert.Equal("data", data.Data);
+    }
+
+    [Fact]
+    public async Task Post_ValuesBadRequest()
+    {
+      // Arrange
+      var client = _factory.CreateClient();
+      var content = JsonConvert.SerializeObject(new AddValue
+      {
+        Foo = ""
       });
 
       // Act
@@ -61,7 +83,29 @@ namespace Svalbard.Tests
       Assert.Collection(data.Fields, field1 =>
       {
         Assert.Equal("foo", field1.Key);
+        Assert.Equal("This field is required.", field1.Messages.First());
+        Assert.Null(field1.AttemptedValue);
       });
+    }
+
+    [Fact]
+    public async Task Put_ValuesServerError()
+    {
+      // Arrange
+      var client = _factory.CreateClient();
+      var content = JsonConvert.SerializeObject(new { value = "data" });
+
+      // Act
+      var response = await client.PutAsync("/api/values/1", new StringContent(content, Encoding.UTF8, "application/json"));
+
+      // Assert
+      Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
+      var data = await ReadResponse<Error>(response);
+
+      Assert.Equal("The method or operation is not implemented.", data.Message);
+      Assert.Equal("ServerError", data.Code);
+      Assert.Empty(data.Fields);
     }
 
     private async Task<T> ReadResponse<T>(HttpResponseMessage response)
