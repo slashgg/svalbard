@@ -108,6 +108,21 @@ namespace Svalbard.Tests
       Assert.Empty(data.Fields);
     }
 
+    [Fact]
+    public async Task Delete_ValuesUnauthorized()
+    {
+      // Arrange
+      var client = _factory.CreateClient();
+      var content = JsonConvert.SerializeObject(new { value = "data" });
+
+      // Act
+      var response = await client.DeleteAsync("/api/values/1");
+
+      // Assert
+      Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+      Assert.Equal(0, response.Content.Headers.ContentLength);
+    }
+
     private async Task<T> ReadResponse<T>(HttpResponseMessage response)
     {
       var content = await response.Content.ReadAsStringAsync();

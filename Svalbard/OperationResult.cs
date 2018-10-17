@@ -12,6 +12,7 @@ namespace Svalbard
   {
     private readonly T _data;
     private readonly Exception _exception;
+    private readonly int _statusCode;
 
     public OperationResult()
     {
@@ -26,6 +27,11 @@ namespace Svalbard
     public OperationResult(Exception e)
     {
       _exception = e;
+    }
+
+    private OperationResult(int statusCode)
+    {
+      _statusCode = statusCode;
     }
 
     public async Task ExecuteResultAsync(ActionContext context)
@@ -43,6 +49,12 @@ namespace Svalbard
 
         await WritePayload(error, context.HttpContext);
 
+        return;
+      }
+
+      if (_statusCode != 0)
+      {
+        response.StatusCode = _statusCode;
         return;
       }
 
@@ -77,10 +89,15 @@ namespace Svalbard
       }
     }
     
-    public static implicit operator OperationResult<T>(T other)
-    {
-      return new OperationResult<T>(other);
-    }
+    public static implicit operator OperationResult<T>(T other) => new OperationResult<T>(other);
+    public static implicit operator OperationResult<T>(BadRequestResult other) => new OperationResult<T>(other.StatusCode);
+    public static implicit operator OperationResult<T>(ConflictResult other) => new OperationResult<T>(other.StatusCode);
+    public static implicit operator OperationResult<T>(NoContentResult other) => new OperationResult<T>(other.StatusCode);
+    public static implicit operator OperationResult<T>(NotFoundResult other) => new OperationResult<T>(other.StatusCode);
+    public static implicit operator OperationResult<T>(OkResult other) => new OperationResult<T>(other.StatusCode);
+    public static implicit operator OperationResult<T>(UnauthorizedResult other) => new OperationResult<T>(other.StatusCode);
+    public static implicit operator OperationResult<T>(UnprocessableEntityResult other) => new OperationResult<T>(other.StatusCode);
+    public static implicit operator OperationResult<T>(UnsupportedMediaTypeResult other) => new OperationResult<T>(other.StatusCode);
 
     private async Task WritePayload(object data, HttpContext context)
     {

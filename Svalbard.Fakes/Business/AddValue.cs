@@ -1,5 +1,4 @@
 ﻿using Svalbard.Infrastructure;
-using System.Runtime.Serialization;
 
 namespace Svalbard.Fakes.Business
 {

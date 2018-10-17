@@ -36,9 +36,15 @@ namespace Svalbard.Fakes.Controllers
 
     // PUT api/values/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public OperationResult<Value> Put(int id, [FromBody] string value)
     {
       throw new NotImplementedException();
+    }
+
+    [HttpDelete("{id}")]
+    public OperationResult<Value> Delete(int id)
+    {
+      return Unauthorized();
     }
   }
 }
