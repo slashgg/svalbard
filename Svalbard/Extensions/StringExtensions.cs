@@ -5,10 +5,10 @@ namespace Svalbard
 {
   public static class StringExtensions
   {
-    public static int ToMurmurHash(this string text)
+    public static Int64 ToMurmurHash(this string text)
     {
       var hash = MurmurHash2.ComputeHash(text);
-      return Convert.ToInt32(hash);
+      return Convert.ToInt64(hash);
     }
   }
 }
