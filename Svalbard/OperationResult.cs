@@ -8,37 +8,32 @@ using System.Threading.Tasks;
 
 namespace Svalbard
 {
-  public class OperationResult<T> : IActionResult
+  public class OperationResult<T> : OperationResult
   {
-    private readonly T _data;
-    private readonly Exception _exception;
-    private readonly int _statusCode;
-    private readonly string _errorKey;
-
+    protected readonly T _data;
     public OperationResult()
     {
       _data = default(T);
     }
 
-    public OperationResult(T data, string errorKey = null)
+    public OperationResult(string errorKey) : base(errorKey)
+    {
+    }
+
+    public OperationResult(T data, string errorKey = null) : base(errorKey)
     {
       _data = data;
-      _errorKey = errorKey;
     }
 
-    public OperationResult(Exception e, string errorKey = null)
+    public OperationResult(Exception e, string errorKey = null) : base(e, errorKey)
     {
-      _exception = e;
-      _errorKey = errorKey;
     }
 
-    private OperationResult(int statusCode, string errorKey = null)
+    public OperationResult(int statusCode, string errorKey = null) : base(statusCode, errorKey)
     {
-      _statusCode = statusCode;
-      _errorKey = errorKey;
     }
 
-    public async Task ExecuteResultAsync(ActionContext context)
+    public override async Task ExecuteResultAsync(ActionContext context)
     {
       var response = context.HttpContext.Response;
       response.ContentType = "application/json; charset=utf-8";
@@ -96,7 +91,7 @@ namespace Svalbard
         await WritePayload(_data, context.HttpContext);
       }
     }
-    
+
     public static implicit operator OperationResult<T>(T other) => new OperationResult<T>(other);
     public static implicit operator OperationResult<T>(BadRequestResult other) => new OperationResult<T>(other.StatusCode);
     public static implicit operator OperationResult<T>(ConflictResult other) => new OperationResult<T>(other.StatusCode);
@@ -107,7 +102,98 @@ namespace Svalbard
     public static implicit operator OperationResult<T>(UnprocessableEntityResult other) => new OperationResult<T>(other.StatusCode);
     public static implicit operator OperationResult<T>(UnsupportedMediaTypeResult other) => new OperationResult<T>(other.StatusCode);
 
-    private async Task WritePayload(object data, HttpContext context)
+  }
+  public class OperationResult : IActionResult
+  {
+    protected readonly Exception _exception;
+    protected readonly int _statusCode;
+    protected readonly string _errorKey;
+
+    public OperationResult()
+    {
+    }
+
+    public OperationResult(string errorKey)
+    {
+      _errorKey = errorKey;
+    }
+
+    public OperationResult(Exception e, string errorKey = null)
+    {
+      _exception = e;
+      _errorKey = errorKey;
+    }
+
+    public OperationResult(int statusCode, string errorKey = null)
+    {
+      _statusCode = statusCode;
+      _errorKey = errorKey;
+    }
+
+    public virtual async Task ExecuteResultAsync(ActionContext context)
+    {
+      var response = context.HttpContext.Response;
+      response.ContentType = "application/json; charset=utf-8";
+
+      if (_exception != null)
+      {
+        response.StatusCode = 500;
+
+        var error = new Error();
+        error.Message = _exception.Message;
+        error.Code = "ServerError";
+
+        await WritePayload(error, context.HttpContext);
+
+        return;
+      }
+
+      if (!context.ModelState.IsValid && _statusCode == 400)
+      {
+        response.StatusCode = 400;
+
+        var error = new Error();
+        error.Message = "Something was wrong with your input.";
+        error.Code = "InvalidModel";
+
+        foreach (var item in context.ModelState.Where(ms => ms.Value.Errors.Any()))
+        {
+          error.Fields.Add(new FieldError
+          {
+            AttemptedValue = item.Value.AttemptedValue,
+            Key = item.Key,
+            Messages = item.Value.Errors.Select(e => e.ErrorMessage),
+          });
+
+          await WritePayload(error, context.HttpContext);
+
+          return;
+        }
+      }
+
+      if (_statusCode > 0)
+      {
+        response.StatusCode = _statusCode;
+        if (_errorKey != null)
+        {
+          await WritePayload(new { error = _errorKey }, context.HttpContext);
+        }
+        return;
+      }
+
+      response.StatusCode = 204;
+    }
+    
+    public static implicit operator OperationResult(BadRequestResult other) => new OperationResult(other.StatusCode);
+    public static implicit operator OperationResult(ConflictResult other) => new OperationResult(other.StatusCode);
+    public static implicit operator OperationResult(NoContentResult other) => new OperationResult(other.StatusCode);
+    public static implicit operator OperationResult(NotFoundResult other) => new OperationResult(other.StatusCode);
+    public static implicit operator OperationResult(OkResult other) => new OperationResult(other.StatusCode);
+    public static implicit operator OperationResult(UnauthorizedResult other) => new OperationResult(other.StatusCode);
+    public static implicit operator OperationResult(UnprocessableEntityResult other) => new OperationResult(other.StatusCode);
+    public static implicit operator OperationResult(UnsupportedMediaTypeResult other) => new OperationResult(other.StatusCode);
+
+    protected async Task WritePayload(object data, HttpContext context)
     {
       var payload = JsonConvert.SerializeObject(data);
       await context.Response.WriteAsync(payload, Encoding.UTF8, context.RequestAborted);
