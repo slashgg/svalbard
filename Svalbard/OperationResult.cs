@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -13,25 +13,29 @@ namespace Svalbard
     private readonly T _data;
     private readonly Exception _exception;
     private readonly int _statusCode;
+    private readonly string _errorKey;
 
     public OperationResult()
     {
       _data = default(T);
     }
 
-    public OperationResult(T data)
+    public OperationResult(T data, string errorKey = null)
     {
       _data = data;
+      _errorKey = errorKey;
     }
 
-    public OperationResult(Exception e)
+    public OperationResult(Exception e, string errorKey = null)
     {
       _exception = e;
+      _errorKey = errorKey;
     }
 
-    private OperationResult(int statusCode)
+    private OperationResult(int statusCode, string errorKey = null)
     {
       _statusCode = statusCode;
+      _errorKey = errorKey;
     }
 
     public async Task ExecuteResultAsync(ActionContext context)
@@ -78,6 +82,10 @@ namespace Svalbard
       if (_statusCode > 0)
       {
         response.StatusCode = _statusCode;
+        if (_errorKey != null)
+        {
+          await WritePayload(new { error = _errorKey }, context.HttpContext);
+        }
         return;
       }
 
