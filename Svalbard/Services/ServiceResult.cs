@@ -13,6 +13,12 @@ namespace Svalbard.Services
     {
       this.Data = data;
     }
+
+    public void Succeed(T data)
+    {
+      this.Data = data;
+      base.Succeed();
+    }
   }
 
   public class ServiceResult
@@ -31,6 +37,12 @@ namespace Svalbard.Services
     {
       this.ErrorKey = errorKey;
       this.Success = false;
+    }
+
+    public void Succeed()
+    {
+      this.Success = true;
+      this.ErrorKey = null;
     }
   }
 }
