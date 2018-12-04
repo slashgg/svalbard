@@ -42,7 +42,7 @@ namespace Svalbard.Configuration
 
         foreach (var kvp in data)
         {
-          Data.Add($"{secretId}:${kvp.Key}", kvp.Value);
+          Data.Add($"{secretId}:{kvp.Key}", kvp.Value);
         }
       }
     }
