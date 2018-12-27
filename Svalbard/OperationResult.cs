@@ -196,6 +196,8 @@ namespace Svalbard
     protected async Task WritePayload(object data, HttpContext context)
     {
       var payload = JsonConvert.SerializeObject(data);
+      context.Response.Headers.ContentLength = payload.Length;
+
       await context.Response.WriteAsync(payload, Encoding.UTF8, context.RequestAborted);
     }
   }

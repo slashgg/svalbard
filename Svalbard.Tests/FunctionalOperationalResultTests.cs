@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Svalbard.Fakes;
 using Svalbard.Fakes.Business;
@@ -36,6 +36,24 @@ namespace Svalbard.Tests
 
       Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
       Assert.Collection(data, val1 => val1.Equals("value1"), val2 => val2.Equals("value2"));
+    }
+
+    [Fact]
+    public async Task Get_ValueSuccessful()
+    {
+      // Arrange
+      var client = _factory.CreateClient();
+
+      // Act
+      var response = await client.GetAsync("/api/values/1");
+
+      // Assert
+      response.EnsureSuccessStatusCode();
+
+      var data = await ReadResponse<Value>(response);
+
+      Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+      Assert.True(response.Content.Headers.ContentLength > 0);
     }
 
     [Fact]

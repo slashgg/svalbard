@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Svalbard.Fakes.Business;
 using System;
 
@@ -28,7 +28,7 @@ namespace Svalbard.Fakes.Controllers
     {
       if (!ModelState.IsValid)
       {
-        return Value.Empty;
+        return BadRequest();
       }
 
       return new Value { Data = value.Foo };
