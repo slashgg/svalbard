@@ -7,7 +7,7 @@ namespace Svalbard.Services
     public ServiceResult() { }
 
     public ServiceResult(bool success) : base(success) { }
-    public ServiceResult(string errorKey) : base(errorKey) { }
+    public ServiceResult(ServiceError error) : base(error) { }
 
     public ServiceResult(T data)
     {
@@ -23,7 +23,7 @@ namespace Svalbard.Services
 
   public class ServiceResult
   {
-    public string ErrorKey { get; set; }
+    public ServiceError Error { get; set; }
     public bool Success { get; set; } = false;
 
     public ServiceResult() { }
@@ -33,16 +33,16 @@ namespace Svalbard.Services
       this.Success = success;
     }
 
-    public ServiceResult(string errorKey)
+    public ServiceResult(ServiceError error)
     {
-      this.ErrorKey = errorKey;
+      this.Error = error;
       this.Success = false;
     }
 
     public void Succeed()
     {
       this.Success = true;
-      this.ErrorKey = null;
+      this.Error = null;
     }
   }
 }

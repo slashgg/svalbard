@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Svalbard
 {
@@ -17,5 +17,18 @@ namespace Svalbard
     public string Key { get; set; }
     public string AttemptedValue { get; set; }
     public IEnumerable<string> Messages { get; set; }
+  }
+
+  public class ServiceError
+  {
+    public string Key { get; set; }
+    public int StatusCode { get; set; }
+
+    public ServiceError() { }
+    public ServiceError(string key, int statusCode)
+    {
+      this.Key = key;
+      this.StatusCode = statusCode;
+    }
   }
 }

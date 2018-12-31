@@ -16,20 +16,20 @@ namespace Svalbard
       _data = default(T);
     }
 
-    public OperationResult(string errorKey) : base(errorKey)
+    public OperationResult(ServiceError error) : base(error)
     {
     }
 
-    public OperationResult(T data, string errorKey = null) : base(errorKey)
+    public OperationResult(T data, ServiceError error = null) : base(error)
     {
       _data = data;
     }
 
-    public OperationResult(Exception e, string errorKey = null) : base(e, errorKey)
+    public OperationResult(Exception e, ServiceError error = null) : base(e, error)
     {
     }
 
-    public OperationResult(int statusCode, string errorKey = null) : base(statusCode, errorKey)
+    public OperationResult(int statusCode, ServiceError error = null) : base(statusCode, error)
     {
     }
 
@@ -113,21 +113,23 @@ namespace Svalbard
     {
     }
 
-    public OperationResult(string errorKey)
+    public OperationResult(ServiceError error)
     {
-      _errorKey = errorKey;
+      this._statusCode = error.StatusCode;
+      this._errorKey = error.Key;
     }
 
-    public OperationResult(Exception e, string errorKey = null)
+    public OperationResult(Exception e, ServiceError error = null)
     {
       _exception = e;
-      _errorKey = errorKey;
+      this._statusCode = error.StatusCode;
+      this._errorKey = error.Key;
     }
 
-    public OperationResult(int statusCode, string errorKey = null)
+    public OperationResult(int statusCode, ServiceError error = null)
     {
-      _statusCode = statusCode;
-      _errorKey = errorKey;
+      this._statusCode = statusCode;
+      this._errorKey = error.Key;
     }
 
     public virtual async Task ExecuteResultAsync(ActionContext context)
