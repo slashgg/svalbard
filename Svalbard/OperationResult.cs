@@ -115,21 +115,30 @@ namespace Svalbard
 
     public OperationResult(ServiceError error)
     {
-      this._statusCode = error.StatusCode;
-      this._errorKey = error.Key;
+      if (error != null)
+      {
+        this._statusCode = error.StatusCode;
+        this._errorKey = error.Key;
+      }
     }
 
     public OperationResult(Exception e, ServiceError error = null)
     {
       _exception = e;
-      this._statusCode = error.StatusCode;
-      this._errorKey = error.Key;
+      if (error != null)
+      {
+        this._statusCode = error.StatusCode;
+        this._errorKey = error.Key;
+      }
     }
 
     public OperationResult(int statusCode, ServiceError error = null)
     {
-      this._statusCode = statusCode;
-      this._errorKey = error.Key;
+      if (error != null)
+      {
+        this._statusCode = error.StatusCode;
+        this._errorKey = error.Key;
+      }
     }
 
     public virtual async Task ExecuteResultAsync(ActionContext context)
