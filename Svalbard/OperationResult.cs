@@ -163,6 +163,8 @@ namespace Svalbard
             error.Fields.Add(fieldError);
           }
           this._error = error;
+          this._statusCode = 400;
+          this._errorKey = "INVALID_PAYLOAD";
         } else if (serviceResult.Error != null)
         {
           this._statusCode = serviceResult.Error.StatusCode;

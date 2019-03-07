@@ -15,9 +15,13 @@
     <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <PackageReleaseNotes>2018/12/26 - Set content length on OperationResult where it contains data.
 2018/12/15 - Updated to SDK 2.2
-2018/12/31 - ServiceError for OperationResult</PackageReleaseNotes>
+2018/12/31 - ServiceError for OperationResult
+
+1.5.0
+Added ServiceResult Constructor for Operation Result
+Added FieldErrors for Operation Result</PackageReleaseNotes>
     <FileVersion>1.0.1.0</FileVersion>
-    <Version>1.4.2</Version>
+    <Version>1.5.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
