@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Svalbard.Services;
 
 namespace Svalbard
 {
@@ -31,6 +32,14 @@ namespace Svalbard
 
     public OperationResult(int statusCode, ServiceError error = null) : base(statusCode, error)
     {
+    }
+
+    public OperationResult(ServiceResult<T> serviceResult) : base(serviceResult)
+    {
+      if (serviceResult.Success)
+      {
+        this._data = serviceResult.Data;
+      }
     }
 
     public override async Task ExecuteResultAsync(ActionContext context)
@@ -108,6 +117,7 @@ namespace Svalbard
     protected readonly Exception _exception;
     protected readonly int _statusCode;
     protected readonly string _errorKey;
+    protected readonly Error _error;
 
     public OperationResult()
     {
@@ -140,6 +150,27 @@ namespace Svalbard
         this._errorKey = error.Key;
       }
     }
+
+    public OperationResult(ServiceResult serviceResult)
+    {
+      if (!serviceResult.Success)
+      {
+        if (serviceResult.FieldErrors.Any())
+        {
+          var error = new Error();
+          foreach (var fieldError in serviceResult.FieldErrors)
+          {
+            error.Fields.Add(fieldError);
+          }
+          this._error = error;
+        } else if (serviceResult.Error != null)
+        {
+          this._statusCode = serviceResult.Error.StatusCode;
+          this._errorKey = serviceResult.Error.Key;
+        }
+      }
+    }
+
 
     public virtual async Task ExecuteResultAsync(ActionContext context)
     {

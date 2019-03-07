@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+
 namespace Svalbard.Services
 {
   public class ServiceResult<T> : ServiceResult
@@ -24,6 +27,7 @@ namespace Svalbard.Services
   public class ServiceResult
   {
     public ServiceError Error { get; set; }
+    public IList<FieldError> FieldErrors { get; set; } = new List<FieldError>();
     public bool Success { get; set; } = false;
 
     public ServiceResult() { }
