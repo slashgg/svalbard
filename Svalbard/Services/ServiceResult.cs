@@ -62,5 +62,13 @@ namespace Svalbard.Services
       var fieldError = new FieldError(key, attemptedValue, new List<string> { message });
       this.FieldErrors.Add(fieldError);
     }
+
+    public void AddFieldError(FieldError fieldError)
+    {
+      foreach (var message in fieldError.Messages)
+      {
+        this.AddFieldError(fieldError.Key, fieldError.AttemptedValue, message);
+      }
+    }
   }
 }
