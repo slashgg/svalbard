@@ -24,11 +24,11 @@ Added FieldErrors for Operation Result
 1.51
 Added Error Parsing to OperationResult</PackageReleaseNotes>
     <FileVersion>1.0.1.0</FileVersion>
-    <Version>1.5.1</Version>
+    <Version>1.5.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.2.32" />
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.3.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />

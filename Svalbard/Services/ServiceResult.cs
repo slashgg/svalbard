@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Svalbard.Services
 {
@@ -47,6 +48,19 @@ namespace Svalbard.Services
     {
       this.Success = true;
       this.Error = null;
+    }
+
+    public void AddFieldError(string key, string attemptedValue, string message)
+    {
+      var existingFieldError = this.FieldErrors.FirstOrDefault(fe => fe.Key == key);
+      if (existingFieldError != null)
+      {
+        existingFieldError.Messages.Append(message);
+        return;
+      }
+
+      var fieldError = new FieldError(key, attemptedValue, new List<string> { message });
+      this.FieldErrors.Add(fieldError);
     }
   }
 }
