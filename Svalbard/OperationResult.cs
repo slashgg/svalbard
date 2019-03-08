@@ -60,6 +60,13 @@ namespace Svalbard
         return;
       }
 
+      if (_error != null)
+      {
+        response.StatusCode = 400;
+        await WritePayload(_error, context.HttpContext);
+        return;
+      }
+
       if (!context.ModelState.IsValid && _statusCode == 400)
       {
         response.StatusCode = 400;
@@ -90,7 +97,6 @@ namespace Svalbard
         {
           await WritePayload(new { error = _errorKey }, context.HttpContext);
         }
-        return;
       }
 
       response.StatusCode = _data != null ? 200 : 204;
@@ -189,6 +195,13 @@ namespace Svalbard
 
         await WritePayload(error, context.HttpContext);
 
+        return;
+      }
+
+      if (_error != null)
+      {
+        response.StatusCode = 400;
+        await WritePayload(_error, context.HttpContext);
         return;
       }
 

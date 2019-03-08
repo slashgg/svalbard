@@ -18,6 +18,17 @@ namespace Svalbard
     public string Key { get; set; }
     public string AttemptedValue { get; set; }
     public IEnumerable<string> Messages { get; set; }
+
+    public FieldError()
+    {
+    }
+
+    public FieldError(string key, string attemptedValue, IEnumerable<string> messages)
+    {
+      this.Key = key;
+      this.AttemptedValue = attemptedValue;
+      this.Messages = messages;
+    }
   }
 
   public class ServiceError

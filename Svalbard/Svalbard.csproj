@@ -19,9 +19,12 @@
 
 1.5.0
 Added ServiceResult Constructor for Operation Result
-Added FieldErrors for Operation Result</PackageReleaseNotes>
+Added FieldErrors for Operation Result
+
+1.51
+Added Error Parsing to OperationResult</PackageReleaseNotes>
     <FileVersion>1.0.1.0</FileVersion>
-    <Version>1.5.0</Version>
+    <Version>1.5.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
