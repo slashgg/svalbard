@@ -29,6 +29,13 @@ namespace Svalbard
       this.AttemptedValue = attemptedValue;
       this.Messages = messages;
     }
+
+    public FieldError(string key, string attemptedValue, string message)
+    {
+      this.Key = key;
+      this.AttemptedValue = attemptedValue;
+      this.Messages = new List<string> {message};
+    }
   }
 
   public class ServiceError
