@@ -51,10 +51,7 @@ namespace Svalbard
       {
         response.StatusCode = 500;
 
-        var error = new Error();
-        error.Message = _exception.Message;
-        error.Code = "ServerError";
-
+        var error = new Error(_exception.Message, "500");
         await WritePayload(error, context.HttpContext);
 
         return;
@@ -62,41 +59,15 @@ namespace Svalbard
 
       if (_error != null)
       {
-        response.StatusCode = 400;
+        response.StatusCode = _statusCode != 0 ? _statusCode : 400;
         await WritePayload(_error, context.HttpContext);
         return;
-      }
-
-      if (!context.ModelState.IsValid && _statusCode == 400)
-      {
-        response.StatusCode = 400;
-
-        var error = new Error();
-        error.Message = "Something was wrong with your input.";
-        error.Code = "InvalidModel";
-
-        foreach (var item in context.ModelState.Where(ms => ms.Value.Errors.Any()))
-        {
-          error.Fields.Add(new FieldError
-          {
-            AttemptedValue = item.Value.AttemptedValue,
-            Key = item.Key,
-            Messages = item.Value.Errors.Select(e => e.ErrorMessage),
-          });
-
-          await WritePayload(error, context.HttpContext);
-
-          return;
-        }
       }
 
       if (_statusCode > 0)
       {
         response.StatusCode = _statusCode;
-        if (_errorKey != null)
-        {
-          await WritePayload(new { error = _errorKey }, context.HttpContext);
-        }
+        return;
       }
 
       response.StatusCode = _data != null ? 200 : 204;
@@ -122,7 +93,6 @@ namespace Svalbard
   {
     protected readonly Exception _exception;
     protected readonly int _statusCode;
-    protected readonly string _errorKey;
     protected readonly Error _error;
 
     public OperationResult()
@@ -134,7 +104,7 @@ namespace Svalbard
       if (error != null)
       {
         this._statusCode = error.StatusCode;
-        this._errorKey = error.Key;
+        this._error = new Error(error);
       }
     }
 
@@ -144,7 +114,7 @@ namespace Svalbard
       if (error != null)
       {
         this._statusCode = error.StatusCode;
-        this._errorKey = error.Key;
+        this._error = new Error(error);
       }
     }
 
@@ -152,8 +122,8 @@ namespace Svalbard
     {
       if (error != null)
       {
-        this._statusCode = error.StatusCode;
-        this._errorKey = error.Key;
+        this._statusCode = statusCode;
+        this._error = new Error(error);
       }
     }
 
@@ -170,11 +140,9 @@ namespace Svalbard
           }
           this._error = error;
           this._statusCode = 400;
-          this._errorKey = "INVALID_PAYLOAD";
         } else if (serviceResult.Error != null)
         {
           this._statusCode = serviceResult.Error.StatusCode;
-          this._errorKey = serviceResult.Error.Key;
         }
       }
     }
@@ -191,7 +159,7 @@ namespace Svalbard
 
         var error = new Error();
         error.Message = _exception.Message;
-        error.Code = "ServerError";
+        error.Code = "500";
 
         await WritePayload(error, context.HttpContext);
 
@@ -200,41 +168,14 @@ namespace Svalbard
 
       if (_error != null)
       {
-        response.StatusCode = 400;
+        response.StatusCode = _statusCode != 0 ? _statusCode : 400;
         await WritePayload(_error, context.HttpContext);
         return;
-      }
-
-      if (!context.ModelState.IsValid && _statusCode == 400)
-      {
-        response.StatusCode = 400;
-
-        var error = new Error();
-        error.Message = "Something was wrong with your input.";
-        error.Code = "InvalidModel";
-
-        foreach (var item in context.ModelState.Where(ms => ms.Value.Errors.Any()))
-        {
-          error.Fields.Add(new FieldError
-          {
-            AttemptedValue = item.Value.AttemptedValue,
-            Key = item.Key,
-            Messages = item.Value.Errors.Select(e => e.ErrorMessage),
-          });
-
-          await WritePayload(error, context.HttpContext);
-
-          return;
-        }
       }
 
       if (_statusCode > 0)
       {
         response.StatusCode = _statusCode;
-        if (_errorKey != null)
-        {
-          await WritePayload(new { error = _errorKey }, context.HttpContext);
-        }
         return;
       }
 
