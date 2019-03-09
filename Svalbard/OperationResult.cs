@@ -142,6 +142,7 @@ namespace Svalbard
           this._statusCode = 400;
         } else if (serviceResult.Error != null)
         {
+          this._statusCode = serviceResult.Error.StatusCode;
           this._error = new Error(serviceResult.Error);
         }
       }
