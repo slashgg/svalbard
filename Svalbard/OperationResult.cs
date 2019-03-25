@@ -199,5 +199,10 @@ namespace Svalbard
 
       await context.Response.WriteAsync(payload, Encoding.UTF8, context.RequestAborted);
     }
+
+    public bool IsError()
+    {
+      return this._error == null || this._statusCode < 400;
+    }
   }
 }
