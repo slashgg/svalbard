@@ -202,7 +202,7 @@ namespace Svalbard
 
     public bool IsError()
     {
-      return this._error != null || this._statusCode < 400;
+      return this._error != null || this._statusCode >= 400;
     }
   }
 }
