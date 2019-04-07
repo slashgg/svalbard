@@ -120,9 +120,10 @@ namespace Svalbard
 
     public OperationResult(int statusCode, ServiceError error = null)
     {
+      this._statusCode = statusCode;
+
       if (error != null)
       {
-        this._statusCode = statusCode;
         this._error = new Error(error);
       }
     }
